@@ -14,8 +14,19 @@ import (
 
 func main() {
 	http.HandleFunc("/swagger.json", swagger)
-	http.Handle("/docker/", http.StripPrefix("/docker", http.FileServer(http.Dir("/var/docker/volume/swagger"))))
-	// http.Handle("/docker/", http.StripPrefix("/docker", http.FileServer(http.Dir("C:\\docker\\gitlab\\volume\\swagger"))))
+	changeHeaderThenServe := func(h http.Handler) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+			h.ServeHTTP(w, r)
+		}
+	}
+
+	http.Handle("/docker", changeHeaderThenServe(http.StripPrefix("/docker", http.FileServer(http.Dir("/var/docker/volume/swagger")))))
+	// http.Handle("/docker/", http.StripPrefix("/docker", http.FileServer(http.Dir("/var/docker/volume/swagger"))))
+	// http.Handle("/docker/", changeHeaderThenServe(http.StripPrefix("/docker", http.FileServer(http.Dir("C:\\docker\\gitlab\\volume\\swagger")))))
+	// http.Handle("/docker2/", http.StripPrefix("/docker2", http.FileServer(http.Dir("C:\\docker\\gitlab\\volume\\swagger"))))
 	http.ListenAndServe(":8080", nil)
 }
 
