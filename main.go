@@ -14,7 +14,7 @@ import (
 
 func main() {
 	http.HandleFunc("/swagger.json", swagger)
-	http.HandleFunc("/index.json", index)
+	http.Handle("/docker/", http.FileServer(http.Dir("/var/docker/volume/swagger")))
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -23,8 +23,4 @@ func swagger(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	http.ServeFile(w, req, "swagger.json")
-}
-
-func index(w http.ResponseWriter, req *http.Request) {
-	http.ServeFile(w, req, "index.json")
 }
