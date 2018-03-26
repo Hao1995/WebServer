@@ -14,7 +14,8 @@ import (
 
 func main() {
 	http.HandleFunc("/swagger.json", swagger)
-	http.Handle("/docker/", http.FileServer(http.Dir("/var/docker/volume/swagger")))
+	http.Handle("/docker/", http.StripPrefix("/docker", http.FileServer(http.Dir("/var/docker/volume/swagger"))))
+	// http.Handle("/docker/", http.StripPrefix("/docker", http.FileServer(http.Dir("C:\\docker\\gitlab\\volume\\swagger"))))
 	http.ListenAndServe(":8080", nil)
 }
 
