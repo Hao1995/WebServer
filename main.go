@@ -23,7 +23,7 @@ func main() {
 		}
 	}
 
-	http.Handle("/docker", changeHeaderThenServe(http.StripPrefix("/docker", http.FileServer(http.Dir("/var/docker/volume/swagger")))))
+	http.Handle("/docker/", changeHeaderThenServe(http.StripPrefix("/docker", http.FileServer(http.Dir("/var/docker/volume/swagger")))))
 	// http.Handle("/docker/", http.StripPrefix("/docker", http.FileServer(http.Dir("/var/docker/volume/swagger"))))
 	// http.Handle("/docker/", changeHeaderThenServe(http.StripPrefix("/docker", http.FileServer(http.Dir("C:\\docker\\gitlab\\volume\\swagger")))))
 	// http.Handle("/docker2/", http.StripPrefix("/docker2", http.FileServer(http.Dir("C:\\docker\\gitlab\\volume\\swagger"))))
